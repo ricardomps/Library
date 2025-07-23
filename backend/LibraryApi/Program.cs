@@ -10,6 +10,7 @@ builder.Services.AddApiDependencies(builder.Configuration);
 
 var app = builder.Build();
 
+app.Services.MigrateDatabase();
 app.UseSwagger();
 app.UseSwaggerUI();
 

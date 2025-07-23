@@ -15,22 +15,47 @@ public class BookRepository : IBookRepository
         _db = db;
     }
 
-    public Task<Result> DeleteAsync(Book book)
+    public async Task<Result> DeleteAsync(Book book)
     {
-        throw new NotImplementedException();
+        try
+        {
+            _db.Books.Remove(book);
+            await _db.SaveChangesAsync();
+            return Result.Success();
+        }
+        catch (Exception ex)
+        {
+            return Result.Failure($"Error deleting book: {ex.Message}");
+        }
     }
 
     public async Task<Result<IEnumerable<Book>>> GetAllAsync(string? searchTerm = null)
     {
-        var books = await _db.Books
-            .Where(b => string.IsNullOrEmpty(searchTerm) || b.Title.Contains(searchTerm) || b.Author.Contains(searchTerm))
-            .ToListAsync();
-        return Result<IEnumerable<Book>>.Success(books);
+        try
+        {
+            var books = await _db.Books
+                .Where(b => string.IsNullOrEmpty(searchTerm) || b.Title.Contains(searchTerm) || b.Author.Contains(searchTerm))
+                .ToListAsync();
+            return Result<IEnumerable<Book>>.Success(books);
+        }
+        catch (Exception ex)
+        {
+            return Result<IEnumerable<Book>>.Failure($"Error retrieving books: {ex.Message}");
+        }
     }
 
-    public Task<Result<Book>> GetByIdAsync(string id)
+    public async Task<Result<Book>> GetByIdAsync(string id)
     {
-        throw new NotImplementedException();
+        try
+        {
+            var book = await _db.Books.FindAsync(id);
+            if (book == null) return Result<Book>.Failure("Book not found");
+            return Result<Book>.Success(book);
+        }
+        catch (Exception ex)
+        {
+            return Result<Book>.Failure($"Error retrieving book: {ex.Message}");
+        }
     }
 
     public async Task<Result> InsertAsync(Book book)
@@ -47,8 +72,17 @@ public class BookRepository : IBookRepository
         }
     }
 
-    public Task<Result> UpdateAsync(Book book)
+    public async Task<Result> UpdateAsync(Book book)
     {
-        throw new NotImplementedException();
+        try
+        {
+            _db.Books.Update(book);
+            await _db.SaveChangesAsync();
+            return Result.Success();
+        }
+        catch (Exception ex)
+        {
+            return Result.Failure($"Error updating book: {ex.Message}");
+        }
     }
 }

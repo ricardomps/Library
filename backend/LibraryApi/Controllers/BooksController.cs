@@ -35,4 +35,44 @@ public class BooksController : ControllerBase
             return BadRequest(result.Error);
         return StatusCode(StatusCodes.Status201Created, result.Value);
     }
+
+    [HttpPut("{id}")]
+    [ProducesResponseType(typeof(BookDTO), StatusCodes.Status200OK)]
+    public async Task<ActionResult<BookDTO>> UpdateBook(string id, [FromBody] BookFormDTO bookFormDTO)
+    {
+        var result = await _bookConnector.UpdateBookAsync(id, bookFormDTO);
+        if (result.IsFailure)
+            return BadRequest(result.Error);
+        return Ok(result.Value);
+    }
+
+    [HttpPost("{id}/borrow")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    public async Task<IActionResult> BorrowBook(string id)
+    {
+        var result = await _bookConnector.BorrowBookAsync(id);
+        if (result.IsFailure)
+            return BadRequest(result.Error);
+        return NoContent();
+    }
+
+    [HttpPost("{id}/return")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    public async Task<IActionResult> ReturnBook(string id)
+    {
+        var result = await _bookConnector.ReturnBookAsync(id);
+        if (result.IsFailure)
+            return BadRequest(result.Error);
+        return NoContent();
+    }
+
+    [HttpDelete("{id}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    public async Task<IActionResult> DeleteBook(string id)
+    {
+        var result = await _bookConnector.DeleteBookAsync(id);
+        if (result.IsFailure)
+            return BadRequest(result.Error);
+        return NoContent();
+    }
 }

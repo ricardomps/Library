@@ -1,6 +1,8 @@
 using LibraryApi.Application.Extensions;
+using LibraryApi.Data;
 using LibraryApi.Data.Extensions;
 using LibraryApi.Integrations.Extensions;
+using Microsoft.EntityFrameworkCore;
 
 namespace LibraryApi.Extensions;
 
@@ -13,5 +15,11 @@ public static class StartupExtensions
         services.AddRepositories();
         services.AddConnectors();
         return services;
+    }
+
+    public static void MigrateDatabase(this IServiceProvider serviceProvider)
+    {
+        var dbContext = serviceProvider.GetRequiredService<ApplicationDbContext>();
+        dbContext.Database.Migrate();
     }
 }
