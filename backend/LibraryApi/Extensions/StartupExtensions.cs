@@ -17,8 +17,11 @@ public static class StartupExtensions
         return services;
     }
 
-    public static void MigrateDatabase(this IServiceProvider serviceProvider)
+    public static void MigrateDatabase(this IServiceProvider serviceProvider, string env)
     {
+        if (env.Equals("TEST", StringComparison.OrdinalIgnoreCase))
+            return;
+
         using var scope = serviceProvider.CreateScope();
         var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
         dbContext.Database.Migrate();

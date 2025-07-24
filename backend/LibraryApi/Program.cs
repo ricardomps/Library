@@ -1,37 +1,41 @@
 using LibraryApi.Extensions;
-
-var builder = WebApplication.CreateBuilder(args);
-
-builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
-builder.Services.AddApiDependencies(builder.Configuration);
-
-builder.Services.AddCors(options =>
+public class Program
 {
-    options.AddDefaultPolicy(policy =>
+    public static void Main(string[] args)
     {
-        policy.WithOrigins("https://localhost:3000", "http://localhost:3000")
-            .AllowAnyHeader()
-            .AllowAnyMethod();
-    });
-});
+        var builder = WebApplication.CreateBuilder(args);
 
-var app = builder.Build();
+        builder.Services.AddControllers();
+        builder.Services.AddEndpointsApiExplorer();
+        builder.Services.AddSwaggerGen();
 
-app.Services.MigrateDatabase();
-app.UseSwagger();
-app.UseSwaggerUI();
+        builder.Services.AddApiDependencies(builder.Configuration);
 
-app.UseHttpsRedirection();
+        builder.Services.AddCors(options =>
+        {
+            options.AddDefaultPolicy(policy =>
+            {
+                policy.WithOrigins("https://localhost:3000", "http://localhost:3000")
+                    .AllowAnyHeader()
+                    .AllowAnyMethod();
+            });
+        });
 
-app.UseRouting();
-app.UseCors();
+        var app = builder.Build();
 
-app.UseEndpoints(endpoints =>
-{
-    endpoints.MapControllers();
-});
+        app.Services.MigrateDatabase(app.Environment.EnvironmentName);
+        app.UseSwagger();
+        app.UseSwaggerUI();
 
-app.Run();
+        app.UseHttpsRedirection();
+
+        app.UseRouting();
+        app.UseCors();
+
+        app.UseEndpoints(endpoints =>
+        {
+            endpoints.MapControllers();
+        });
+
+        app.Run();
+    }}

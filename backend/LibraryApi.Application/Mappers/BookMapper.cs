@@ -25,18 +25,4 @@ public static class BookMapper
 
         return books.Select(book => book.ToDto());
     }
-
-    public static Book ToEntity(this BookDTO bookDto)
-    {
-        if (bookDto == null) return null;
-
-        return new Book
-        {
-            Id = bookDto.Id,
-            Title = bookDto.Title,
-            Author = bookDto.Author,
-            Publisher = bookDto.Publisher,
-            Available = bookDto.Available
-        };
-    }
 }
