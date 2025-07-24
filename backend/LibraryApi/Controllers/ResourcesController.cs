@@ -14,8 +14,32 @@ public class ResourcesController : ControllerBase
     {
         var resources = new ResourcesDTO
         {
-            Authors = new[] { "Author1", "Author2" },
-            Publishers = new[] { "Publisher1", "Publisher2" }
+            Authors = new[]
+            {
+                "Richard Memeison",
+                "Susan Dogeson",
+                "Harold Smilesworth",
+                "Brian Luckley",
+                "Catherine Grump",
+                "Erma Gerdman",
+                "Philip Sauraptor",
+                "Olivia Attached",
+                "Ben Distractson",
+                "Lola Frogman"
+            },
+            Publishers = new[]
+            {
+                "Twist & Shout Publishing",
+                "Viral & Sons",
+                "Grinworthy Books",
+                "Epic Reads Ltd.",
+                "Wholesome House",
+                "Kek & Co.",
+                "Rare Pepe Publishing",
+                "Classic Internet Press",
+                "Memeology Group",
+                "Top Shelf Memes"
+            }
         };
         return Ok(resources);
     }

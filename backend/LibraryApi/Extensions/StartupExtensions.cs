@@ -19,7 +19,8 @@ public static class StartupExtensions
 
     public static void MigrateDatabase(this IServiceProvider serviceProvider)
     {
-        var dbContext = serviceProvider.GetRequiredService<ApplicationDbContext>();
+        using var scope = serviceProvider.CreateScope();
+        var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
         dbContext.Database.Migrate();
     }
 }
