@@ -34,7 +34,11 @@ public class BookRepository : IBookRepository
         try
         {
             var books = await _db.Books
-                .Where(b => string.IsNullOrEmpty(searchTerm) || b.Title.Contains(searchTerm) || b.Author.Contains(searchTerm))
+                .AsNoTracking()
+                .Where(b => string.IsNullOrEmpty(searchTerm)
+                    || EF.Functions.ILike(b.Title, $"%{searchTerm}%")
+                    || EF.Functions.ILike(b.Author, $"%{searchTerm}%"))
+                .OrderBy(b => b.Title)
                 .ToListAsync();
             return Result<IEnumerable<Book>>.Success(books);
         }
